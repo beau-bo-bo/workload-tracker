@@ -126,10 +126,11 @@
 > ดังนั้น **B2 และ B3 ให้เลื่อนไปทำพร้อมงาน LINE** อย่าเพิ่งลงแรงรื้อ session ตอนนี้
 > ทำเฉพาะ **B1** ซึ่งเป็นเรื่องที่ทำให้ระบบใช้งานไม่ได้จริง ๆ
 
-### B1. Cookie ใช้งานได้บน HTTP LAN (แก้ S6) — ✅ แก้แล้ว 2026-09-15
+### B1. Cookie ใช้งานได้บน HTTP LAN (แก้ S6) — ✅ แก้แล้ว 2026-09-15 · **ทดสอบบนของจริงผ่านแล้ว 2026-09-16**
 
 `src/lib/auth.ts` เปลี่ยนมาใช้ env `APP_SECURE_COOKIES` แทน `NODE_ENV` แล้ว
-**ยังต้องทดสอบ:** `npm run build && npm start` แล้วเข้าจาก LAN IP จริง ไม่ใช่ localhost — บั๊กนี้ไม่โผล่ใน dev mode
+**ผลทดสอบจริง:** deploy ขึ้น Vercel (https) พร้อมตั้ง `APP_SECURE_COOKIES=true` → ผู้ใช้ login ผ่าน เข้าหน้าหลักได้ ไม่วนลูป
+นี่คือการพิสูจน์ว่าการแยก flag ออกจาก `NODE_ENV` ถูกต้อง — production build + https ใช้ `true`, LAN http ใช้ `false`, สลับได้โดยไม่ต้องแก้โค้ด
 
 ### B2. Session ที่ revoke ได้ (แก้ S3) — ⏸️ รอทำพร้อม LINE Login
 

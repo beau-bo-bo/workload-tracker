@@ -162,6 +162,28 @@
 
 **ยังไม่ได้ทดสอบ:** `/trash` กับบัญชีที่ไม่ใช่ admin (ต้องสลับบัญชีทับ session ที่ผู้ใช้ล็อกอินค้างไว้ จึงไม่ทำ) — โค้ดใช้กฎเดียวกับที่ middleware ใช้อยู่แล้ว
 
+#### 8. ขึ้นใช้งานจริงแล้ว (2026-09-16)
+
+| | |
+|---|---|
+| เว็บจริง | **https://workload-tracker-kappa.vercel.app** |
+| โค้ด | **https://github.com/beau-bo-bo/workload-tracker** (private — ในเอกสารมีชื่อคนจริงและรายละเอียดภายใน) |
+| วิธี deploy | push ขึ้น `main` → Vercel build + deploy เองอัตโนมัติ |
+
+- **Phase 6 ✅ อนุมัติแล้ว** (ผู้ใช้ยืนยัน "Phase 6 เห็นชอบแล้ว") · เรื่อง LINE Login พักไว้ก่อนตามที่ผู้ใช้สั่ง
+- git repo เพิ่งถูกสร้างในวันนี้ (ก่อนหน้านี้โปรเจกต์ไม่เคยอยู่ใต้ git เลย) — commit แรกรวมทุกอย่าง 81 ไฟล์
+  `.gitignore` กัน `.env*` ไว้อยู่แล้ว และเพิ่มกัน `/.agents/`, `/.claude/skills/`, `/scratchpad/` (เครื่องมือ AI ที่ vendor ไว้ 159 ไฟล์ ไม่ใช่ส่วนหนึ่งของแอป)
+- **ตรวจก่อน push:** สแกนไฟล์ทั้งหมดที่จะ commit หาคีย์ (JWT / service_role / token) → ไม่พบ · ยืนยันว่าไม่มีไฟล์ `.env` ถูก commit
+
+**ตรวจเว็บจริงหลัง deploy แล้ว:**
+- หน้า login โหลดได้ ไม่มี error ใน console
+- **สแกน JavaScript ทั้ง 9 ไฟล์ (560KB) + HTML ที่ส่งถึงเบราว์เซอร์ → ไม่มีคีย์ลับรั่วเลย** (ไม่มี JWT / service_role / แม้แต่ที่อยู่ Supabase)
+- คนที่ยังไม่ login เปิด `/` `/board` `/my-tasks` `/dashboard` `/trash` `/admin/users` → **เด้งไป `/login` ครบทุกหน้า**
+- **ผู้ใช้ทดสอบเอง: login ผ่าน · กด Back ปกติ · refresh ค้างหน้าเดิม** (ยืนยันทั้ง B1 และ Phase F1 บน production)
+
+**⚠️ ยังไม่ได้ทำ ก่อนส่งลิงก์ให้คนอื่นใช้:** รหัสผ่านทุกบัญชียังเป็น `123456` และ URL เปิดสาธารณะแล้ว
+ต้องให้ผู้ใช้เข้าหน้า `/admin/users` กด Reset Password เอง (assistant กรอกรหัสผ่านให้ไม่ได้ เป็นข้อห้ามถาวร)
+
 ---
 
 ### migration ใหม่: `0007_wall_unread_and_drop_private.sql` และ `0008_drop_dead_functions.sql`
@@ -216,7 +238,7 @@
 | 4 | **LINE Login** | ผู้ใช้วางแผนไว้แล้ว · **งาน Phase B2 (session revoke) ให้รอทำพร้อมงานนี้** |
 | 5 | **Phase 6 Approval → Phase 7** | ตามลำดับเดิมใน `PLAN.md` |
 
-**ยังค้างจากเซสชันก่อน:** B1 (cookie บน LAN) แก้โค้ดแล้วแต่**ยังไม่ได้ทดสอบจริง** — ต้อง `npm run build && npm start` แล้วเข้าผ่าน LAN IP ไม่ใช่ localhost (บั๊กนี้ไม่โผล่ใน dev mode)
+**✅ B1 (cookie) ปิดแล้ว 2026-09-16** — พิสูจน์บนของจริงตอน deploy ขึ้น Vercel (https + `APP_SECURE_COOKIES=true`) ผู้ใช้ login ผ่าน ไม่วนลูป
 
 ---
 
