@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+:root {
+  /* pastel palette inspired by กฟผ.'s gold map / red bolt / blue wordmark, softened */
+  --bg: #f6f4ee;
+  --surface: #ffffff;
+  --border: #ddd4bd;
+  --text: #2b2e33;
+  --muted: #635c4d;
+  --accent: #33517d;
+  --accent-soft: #dfe8f7;
+  --primary: #ddb876;
+  --primary-soft: #fbf3e4;
+  --on-primary: #40300c;
+  --pending: #9c2415;
+  /* ระดับกลางของ Heat Map (4-6 งาน) — เพิ่ม 2026-09-16 ตามที่ผู้ใช้ขอไล่สี 3 ระดับ
+     ต้องเป็น token จริง ไม่ใช่สีโปร่งแสงทับ token เดิม ตามกฎเดิมของโปรเจกต์ */
+  --pending-mid: #eab5a6;
+  --pending-soft: #f5ded7;
+  --done: #2f6b4a;
+  --done-soft: #e2f0e7;
+  --closed: #8f8674;
+  --closed-soft: #ece5d7;
+  --status-closed: #5b6470;
+  --status-closed-soft: #e7e8ea;
+  --note-soft: #fbeec6;
+  --font-display: var(--font-plex-thai);
+}
+
+:root[data-theme="dark"] {
+  --bg: #14181f;
+  --surface: #1b2029;
+  --border: #2b323e;
+  --text: #e7e8ec;
+  --muted: #9aa1ac;
+  --accent: #97b4ef;
+  --accent-soft: #22314a;
+  --primary: #e3b34a;
+  --primary-soft: #1b2029;
+  --on-primary: #241a05;
+  --pending: #dd9a82;
+  --pending-mid: #5f3529;
+  --pending-soft: #3a2420;
+  --done: #7cc99a;
+  --done-soft: #1e3327;
+  --closed: #9ba3af;
+  --closed-soft: #262a30;
+  --status-closed: #9ba3af;
+  --status-closed-soft: #262a30;
+  --note-soft: var(--surface);
+  --font-display: var(--font-chakra), var(--font-plex-thai);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-primary: var(--primary);
+  --color-primary-soft: var(--primary-soft);
+  --color-on-primary: var(--on-primary);
+  --color-pending: var(--pending);
+  --color-pending-mid: var(--pending-mid);
+  --color-pending-soft: var(--pending-soft);
+  --color-done: var(--done);
+  --color-done-soft: var(--done-soft);
+  --color-closed: var(--closed);
+  --color-closed-soft: var(--closed-soft);
+  --color-status-closed: var(--status-closed);
+  --color-status-closed-soft: var(--status-closed-soft);
+  --color-note-soft: var(--note-soft);
+  --font-sans: var(--font-plex-thai);
+  --font-display: var(--font-display);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/*
+ * กรอบโฟกัสสำหรับผู้ใช้คีย์บอร์ด (แก้ U10)
+ *
+ * เดิมทุกปุ่มมีแต่ hover: และช่องกรอกใส่ outline-none โดยไม่ใส่อะไรแทน
+ * → กด Tab ไปเรื่อย ๆ แล้วไม่รู้เลยว่าตอนนี้อยู่ตรงไหนของหน้าจอ
+ *
+ * ใช้ :focus-visible ไม่ใช่ :focus → กดด้วยเมาส์จะไม่ขึ้นกรอบ (ขึ้นเฉพาะตอนใช้คีย์บอร์ด)
+ */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
