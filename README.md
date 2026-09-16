@@ -10,6 +10,9 @@
 
 > push ขึ้น branch `main` เมื่อไหร่ Vercel จะ build และ deploy ให้เองอัตโนมัติ
 
+> ⚠️ **`vercel.json` บังคับให้ฟังก์ชันรันที่สิงคโปร์ (`sin1`) ห้ามลบทิ้ง** — ต้องอยู่ภูมิภาคเดียวกับฐานข้อมูล Supabase (ap-southeast-1)
+> ค่าเริ่มต้นของ Vercel คือ `iad1` (สหรัฐฯ) ซึ่งทำให้ทุกคำสั่งฐานข้อมูลวิ่งข้ามโลก ช้ากว่า **9 เท่า** (วัดจริงแล้ว ดู `PROGRESS-TRACKER.md`)
+
 > 👉 **เพิ่งเข้ามารับงานต่อ หรือกำลังเปิดแชทใหม่กับ AI? อ่าน [START-HERE.md](START-HERE.md) ก่อน**
 
 เอกสารประกอบ: [START-HERE.md](START-HERE.md) จุดเริ่มต้น · [AGENTS.md](AGENTS.md) กฎการทำงาน · [CODE-REVIEW.md](CODE-REVIEW.md) ผลตรวจโค้ด · [FIX-INSTRUCTIONS.md](FIX-INSTRUCTIONS.md) งานที่เหลือ · [PRODUCT.md](PRODUCT.md) ขอบเขต · [DESIGN.md](DESIGN.md) หน้าตา UI · [PLAN.md](PLAN.md) ลำดับการพัฒนา · [PROGRESS-TRACKER.md](PROGRESS-TRACKER.md) สถานะปัจจุบัน · [PROGRESS-ARCHIVE.md](PROGRESS-ARCHIVE.md) ประวัติเก่า
