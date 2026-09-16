@@ -43,7 +43,15 @@
   → ใช้เบราว์เซอร์เดิมและเข้าอย่างน้อยสัปดาห์ละครั้ง = ไม่ต้อง login ใหม่เลย
   ⚠️ **แลกมาด้วย: ยิ่งจำเป็นต้องทำ B2 (session ที่ revoke ได้)** เพราะถอดสิทธิ์/ลบผู้ใช้แล้วเขายังใช้ต่อได้จนกว่าจะหยุดใช้เกิน 7 วัน
 - **Test:** vitest `^2` (`npm test`) — ครอบ `src/app/task-workflow.ts` และ `src/app/board-derived.ts`
-- **ขึ้นใช้งานจริงแล้ว 2026-09-16:** https://workload-tracker-kappa.vercel.app (Vercel, deploy อัตโนมัติทุกครั้งที่ push ขึ้น `main`)
+- **⚠️ ขึ้นใช้งานจริงพร้อมกัน 2 ระบบตั้งแต่ 2026-09-16** ใช้โค้ดชุดเดียวกัน (repo/branch เดียวกัน) **แต่ฐานข้อมูลแยกกันเด็ดขาด**:
+  | | ระบบเดิม | ระบบใหม่ |
+  |---|---|---|
+  | เว็บ | https://workload-tracker-kappa.vercel.app | https://workload-tracker-psi.vercel.app |
+  | Supabase | `kalooxclwbnjunuxbjst` | `vohcxhztabjcbdrhwreq` (org csoboard) |
+  | ข้อมูล | ของเดิมทั้งหมด | สะอาด เริ่มใหม่ |
+
+  **push ขึ้น `main` = โค้ดขึ้นทั้ง 2 เว็บพร้อมกันอัตโนมัติเสมอ** (Vercel ทั้งสองบัญชี watch branch เดียวกัน) — แต่ข้อมูลไม่ sync กัน สร้างในเว็บหนึ่งจะไม่โผล่อีกเว็บ
+  รายละเอียดเต็ม + ขั้นตอนย้ายบัญชีซ้ำถ้าต้องทำอีก ดู `README.md` หัวข้อบนสุด
   โค้ดอยู่ที่ https://github.com/beau-bo-bo/workload-tracker (private) · ระหว่างพัฒนายังเข้าผ่าน LAN `http://192.168.1.186:3000` ได้เหมือนเดิม
   ⚠️ **ตัวแปรสภาพแวดล้อมต่างกัน 1 ตัว:** บน Vercel ต้องเป็น `APP_SECURE_COOKIES=true` ส่วนบน LAN (http) ต้องเป็น `false`
 
@@ -95,7 +103,7 @@ supabase/migrations/      ← SQL ทั้งหมด 0001–0008
 ## 6. สถานะปัจจุบัน
 
 **Phase 1–6 อนุมัติแล้วครบ** (Phase 6 อนุมัติ 2026-09-16) · **Phase 7 ยังไม่เริ่ม**
-🚀 **ระบบขึ้นใช้งานจริงแล้ว 2026-09-16 ที่ https://workload-tracker-kappa.vercel.app**
+🚀 **ระบบขึ้นใช้งานจริงพร้อมกัน 2 ระบบตั้งแต่ 2026-09-16** — เดิม `workload-tracker-kappa.vercel.app` · ใหม่ `workload-tracker-psi.vercel.app` (คนละบัญชี Vercel/Supabase โค้ดชุดเดียวกัน ข้อมูลแยกกัน — ดูข้อ 3 ด้านบน)
 
 แทรกด้วย **Phase R (Code Review & Remediation)** ซึ่งแก้ไปแล้ว 9 ชุด:
 
