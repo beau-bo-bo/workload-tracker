@@ -24,13 +24,35 @@ export function Modal({
   const titleId = useId();
 
   /*
-   * a11y ของ dialog (แก้ U9) — เดิมเป็นแค่กล่อง div ลอย ๆ:
-   * กด Esc ไม่ปิด · กด Tab หลุดไปโดนปุ่มที่อยู่ข้างหลัง · หน้าจอข้างหลังเลื่อนตาม · โปรแกรมอ่านหน้าจอไม่รู้ว่านี่คือ dialog
+   * ── ตอนเปิดและตอนปิด dialog: ทำครั้งเดียวเท่านั้น ──────────────────────────
+   *
+   * ⚠️ deps ต้องเป็น [] เสมอ ห้ามใส่ onClose เข้าไปเด็ดขาด
+   *
+   * บั๊กที่เคยเกิดจริง (2026-09-16): เดิม deps เป็น [onClose] ซึ่ง component แม่สร้างฟังก์ชันใหม่ทุก render
+   * → พิมพ์ข้อความ 1 ตัวอักษร = แม่ render ใหม่ = effect นี้ทำงานซ้ำ = โฟกัสเด้งกลับไปช่องแรกของ dialog
+   *   (ผู้ใช้เจอตอนพิมพ์ "บันทึกช่วยจำ" ใน dialog ส่งตรวจ แล้วโฟกัสกระเด้งไป dropdown ทุกตัวอักษร)
+   * ตัวดักปุ่มคีย์บอร์ดแยกไปอยู่ effect ล่างที่อัปเดต onClose ได้โดยไม่ยุ่งกับโฟกัส
    */
   useEffect(() => {
     const previouslyFocused = document.activeElement as HTMLElement | null;
     panelRef.current?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
 
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      // คืนโฟกัสให้ปุ่มที่เปิด dialog นี้ ไม่งั้นพอปิดแล้วโฟกัสเด้งกลับไปต้นหน้า
+      previouslyFocused?.focus();
+    };
+  }, []);
+
+  /*
+   * ── ปุ่มคีย์บอร์ดของ dialog (แก้ U9) ──────────────────────────────────────
+   * Esc = ปิด · Tab = วนอยู่ในกรอบ ไม่หลุดไปโดนปุ่มที่อยู่ข้างหลัง
+   * effect นี้ผูกกับ onClose ได้ เพราะแค่ถอด/ใส่ตัวดัก event ใหม่ ไม่ได้ไปยุ่งกับโฟกัสของผู้ใช้
+   */
+  useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
         onClose();
@@ -52,15 +74,7 @@ export function Modal({
     }
 
     document.addEventListener("keydown", onKeyDown);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.body.style.overflow = prevOverflow;
-      // คืนโฟกัสให้ปุ่มที่เปิด dialog นี้ ไม่งั้นพอปิดแล้วโฟกัสเด้งกลับไปต้นหน้า
-      previouslyFocused?.focus();
-    };
+    return () => document.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
   function stop(e: MouseEvent) {
