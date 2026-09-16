@@ -207,15 +207,19 @@
   ตั้งใจไม่ฝังรหัสผ่านไว้ในไฟล์ (เข้า git ถาวร) — รับเป็นพารามิเตอร์ตอนเรียกจริงแทน · กัน seed ซ้ำด้วย `if exists admin then raise exception`
 - คู่มือย้ายบัญชีเขียนไว้ใน `README.md` หัวข้อ "ย้ายไปบัญชี Vercel / Supabase อื่น" แล้ว
 
-**ติดอยู่ตรงไหน:** MCP connector ของ Supabase ในเซสชันนี้ผูกกับบัญชีเดิม (org "beau-bo-bo's Org") — สร้างโปรเจกต์ใหม่ในบัญชีอื่นให้ไม่ได้จนกว่าผู้ใช้จะไปสลับ connector เป็นบัญชีใหม่ที่หน้า Settings → Connectors ก่อน
-ส่วน Vercel นั้น connector ที่มีอยู่ไม่ได้ผูกกับบัญชีผู้ใช้เลยตั้งแต่ต้น (ยืนยันจาก 403 ตอน deploy ครั้งแรก) — ฝั่งนี้ต้องทำผ่านหน้าเว็บเองทั้งหมดเหมือนรอบก่อน
+**✅ ฝั่ง Supabase เสร็จแล้ว (2026-09-16):**
+- ผู้ใช้สลับ connector ไปบัญชีใหม่ (org "csoboard", id `tiyayuteawgmawtnznnd`)
+- **พบโปรเจกต์อื่นที่มีอยู่ก่อนแล้วในบัญชีนี้** ชื่อ `board-workflow` (13 users, 30 meetings, 387 subjects, 2124 task_routing — schema คนละแบบกับแอปนี้เลย) → **ไม่แตะเลย** สร้างโปรเจกต์ใหม่แยกต่างหาก
+- สร้างโปรเจกต์ `workload-tracker` ใหม่ id `vohcxhztabjcbdrhwreq` ที่ ap-southeast-1 (สิงคโปร์ — ตั้งใจให้ตรงกับเดิมตามบทเรียนเรื่อง region)
+- รัน migration ทั้ง 9 ไฟล์ (0001-0009) เรียงตามลำดับผ่านหมด
+- ตรวจหลังรัน: ตาราง 4 ตัวว่างครบ (0 แถวทุกตาราง) · ฟังก์ชัน 39 ตัว (38 เดิม + `seed_first_admin`) · `anon`/`authenticated` เรียกได้ **0 ตัว** · Advisor ขึ้นแค่ `rls_enabled_no_policy` INFO ที่ตั้งใจให้เป็นแบบนั้น (ไม่มีคำเตือนอื่น)
+- เรียก `seed_first_admin()` สร้างบัญชี `admin` ตัวแรกสำเร็จ (รหัสผ่านสุ่ม แจ้งผู้ใช้ในแชทครั้งเดียว ไม่บันทึกไว้ที่ไหนในเอกสาร — **ต้องเปลี่ยนทันทีหลัง login ครั้งแรก**)
+- Project URL: `https://vohcxhztabjcbdrhwreq.supabase.co` — service_role key ต้องให้ผู้ใช้คัดลอกเองจาก Dashboard (ไม่มีเครื่องมือดึงคีย์นี้ให้)
 
-**ขั้นตอนที่เหลือ (คนทำต่อดูได้จาก README ฉบับเต็ม):**
-1. ผู้ใช้สลับ Supabase connector → บัญชีใหม่
-2. assistant สร้างโปรเจกต์ใหม่ (`create_project`) + รัน migration 0001-0009 ตามลำดับ (`apply_migration`) + เรียก `seed_first_admin` ครั้งเดียว
-3. ผู้ใช้เอา Project URL + service_role key ไปตั้งใน Vercel บัญชีใหม่ (สร้างเองผ่านหน้าเว็บ, import repo เดิมจาก GitHub — อาจต้องเพิ่ม collaborator ถ้า GitHub คนละบัญชี)
-4. `SESSION_SECRET` ต้องสุ่มใหม่ ห้ามใช้ค่าเดิมซ้ำข้ามระบบ · `APP_SECURE_COOKIES=true`
-5. ทดสอบเว็บใหม่ + เปลี่ยนรหัสผ่าน admin ทันทีหลัง login ครั้งแรก
+**⬜ เหลือฝั่ง Vercel (ต้องเป็นผู้ใช้ทำผ่านหน้าเว็บ — connector ไม่ผูกกับบัญชีผู้ใช้เลยตั้งแต่ต้น ยืนยันจาก 403 ตอน deploy ครั้งแรก):**
+1. สร้างโปรเจกต์ใหม่ใน Vercel บัญชีใหม่ → import repo `beau-bo-bo/workload-tracker` (เพิ่ม collaborator ถ้า GitHub คนละบัญชี)
+2. ใส่ env: `SUPABASE_URL` (ด้านบน) · `SUPABASE_SERVICE_ROLE_KEY` (คัดลอกเองจาก Dashboard) · `SESSION_SECRET` (สุ่มใหม่ ห้ามใช้ซ้ำข้ามระบบ) · `APP_SECURE_COOKIES=true`
+3. Deploy แล้วทดสอบ login ด้วย `admin` + รหัสผ่านที่ seed ไว้ → เปลี่ยนรหัสผ่านทันที
 **ระบบเดิม (Vercel/Supabase บัญชีปัจจุบัน) ไม่ถูกแตะต้องเลยตลอดขั้นตอนนี้** — ปิด/ลบเมื่อไหร่เป็นคำสั่งแยกต่างหากที่ต้องให้ผู้ใช้ยืนยันเอง
 
 **🔑 Session ต่ออายุอัตโนมัติ (ผู้ใช้สั่ง 2026-09-16: "ใช้เบราว์เซอร์เดิม ไม่ต้อง login ใหม่")**
