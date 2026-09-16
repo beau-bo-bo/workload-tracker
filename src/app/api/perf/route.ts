@@ -17,7 +17,7 @@ export async function GET() {
 
   const supabase = getSupabaseClient();
 
-  async function timed<T>(label: string, run: () => Promise<T>) {
+  async function timed(label: string, run: () => PromiseLike<unknown>) {
     const t0 = Date.now();
     await run();
     return { label, ms: Date.now() - t0 };
@@ -43,9 +43,9 @@ export async function GET() {
 
   return NextResponse.json({
     region: process.env.VERCEL_REGION ?? "local",
-    เวลาตั้งแต่ฟังก์ชันเริ่มทำงานจนตรวจ session เสร็จ: bootedAt ? Date.now() - bootedAt : null,
-    เรียกฐานข้อมูล8คำสั่งพร้อมกัน: allRpcMs,
-    เรียกซ้ำคำสั่งเดียวตอนอุ่นแล้ว: warmSingleMs,
+    "ตรวจ session เสร็จภายใน (ms)": t0 - bootedAt,
+    "เรียกฐานข้อมูล 8 คำสั่งพร้อมกัน (ms)": allRpcMs,
+    "เรียกซ้ำคำสั่งเดียวตอนอุ่นแล้ว (ms)": warmSingleMs,
     รายตัว: parallel.sort((a, b) => b.ms - a.ms),
   });
 }
