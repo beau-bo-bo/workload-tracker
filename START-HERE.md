@@ -39,6 +39,9 @@
 - **Supabase (Postgres)** — project `workload-tracker` (ref `kalooxclwbnjunuxbjst`, ap-southeast-1)
 - **Auth: เขียนเอง ไม่ใช้ Supabase Auth** — ตาราง `users` + รหัสผ่าน bcrypt ผ่าน pgcrypto ฝั่ง Postgres
   Session = JWT เซ็นเองด้วย `jose` เก็บใน httpOnly cookie (`src/lib/session.ts`, `src/lib/auth.ts`) · ป้องกัน route ด้วย `src/middleware.ts`
+  **อายุ 7 วันแบบต่ออายุอัตโนมัติ** (เพิ่ม 2026-09-16): เปิดใช้เมื่อไหร่ ถ้า token เก่ากว่า 1 วัน middleware จะเซ็นใบใหม่ให้ นับ 7 วันจากวันนั้น
+  → ใช้เบราว์เซอร์เดิมและเข้าอย่างน้อยสัปดาห์ละครั้ง = ไม่ต้อง login ใหม่เลย
+  ⚠️ **แลกมาด้วย: ยิ่งจำเป็นต้องทำ B2 (session ที่ revoke ได้)** เพราะถอดสิทธิ์/ลบผู้ใช้แล้วเขายังใช้ต่อได้จนกว่าจะหยุดใช้เกิน 7 วัน
 - **Test:** vitest `^2` (`npm test`) — ครอบ `src/app/task-workflow.ts` และ `src/app/board-derived.ts`
 - **ขึ้นใช้งานจริงแล้ว 2026-09-16:** https://workload-tracker-kappa.vercel.app (Vercel, deploy อัตโนมัติทุกครั้งที่ push ขึ้น `main`)
   โค้ดอยู่ที่ https://github.com/beau-bo-bo/workload-tracker (private) · ระหว่างพัฒนายังเข้าผ่าน LAN `http://192.168.1.186:3000` ได้เหมือนเดิม
