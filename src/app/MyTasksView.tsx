@@ -241,10 +241,19 @@ export function MyTasksView({
             <div />
           </div>
 
-          <div className="flex flex-col gap-4">
-            {entries.map(({ task, context, inspectors }) => (
-              <div key={task.id} className="flex flex-col gap-1.5">
-                <span className="px-1 font-display text-sm font-semibold text-text lg:text-base">{context}</span>
+          {/*
+            งานที่มาจากครั้งที่ประชุมเดียวกัน (และ Tab/Sub-tab เดียวกัน) แสดงหัวข้อครั้งเดียวด้านบนของกลุ่ม
+            ไม่ซ้ำทุกแถวเหมือนเดิม — เทียบกับแถวก่อนหน้าตรง ๆ ไม่ได้จัดกลุ่มใหม่
+            เพราะลำดับของหน้านี้ตั้งใจเรียงตาม "วันครบกำหนดใกล้สุดก่อน" (ดู DESIGN.md ข้อ 4.10) ไม่ใช่เรียงตามครั้งที่ประชุม
+          */}
+          <div className="flex flex-col gap-1.5">
+            {entries.map(({ task, context, inspectors }, index) => {
+              const startsNewGroup = index === 0 || entries[index - 1].context !== context;
+              return (
+              <div key={task.id} className={`flex flex-col gap-1.5 ${startsNewGroup && index > 0 ? "mt-3" : ""}`}>
+                {startsNewGroup && (
+                  <span className="px-1 font-display text-sm font-semibold text-text lg:text-base">{context}</span>
+                )}
                 <TaskRow
                   task={task}
                   owners={owners}
@@ -261,7 +270,8 @@ export function MyTasksView({
                   onAddHistoryNote={onAddHistoryNote}
                 />
               </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}
