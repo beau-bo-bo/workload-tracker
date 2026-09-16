@@ -45,3 +45,6 @@ next-env.d.ts
 /.claude/skills/
 # ไฟล์ทดลอง/mockup เก่าที่ไม่ได้ใช้ในแอปจริง
 /scratchpad/
+
+# สคริปต์วัดผลชั่วคราวที่รันจาก root (ต้องอยู่นี่เพื่อให้หา node_modules เจอ)
+/.probe-*.mjs
