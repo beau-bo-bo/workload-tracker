@@ -1,11 +1,12 @@
 # PROGRESS-TRACKER.md — Current Status
 
 ## Current Phase:
-**Phase R — Code Review & Remediation (2026-09-15/16) + งานปรับตามคำสั่งผู้ใช้ (2026-09-16)** — เซสชันตรวจโค้ดทั้งระบบโดยผู้ตรวจอิสระ แล้วแก้ตามที่ผู้ใช้สั่งทีละข้อ
-(ไม่ใช่ Phase สร้างฟีเจอร์ตาม PLAN.md เดิม — Phase 6 ยังรอ Approval อยู่เหมือนเดิม, Phase 7 ยังไม่เริ่ม)
+**Phase R — Code Review & Remediation + งานปรับตามคำสั่งผู้ใช้ (2026-09-15/16)** จบลงด้วยการ **นำระบบขึ้นใช้งานจริง**
+🚀 **https://workload-tracker-kappa.vercel.app** (deploy อัตโนมัติจาก branch `main` ของ https://github.com/beau-bo-bo/workload-tracker)
+**Phase 6 ✅ อนุมัติแล้ว (2026-09-16)** · **Phase 7 ยังไม่เริ่ม**
 
 ## Status:
-**แก้แล้ว 6 ชุดตามที่ผู้ใช้สั่ง** (ปิดช่องโหว่ความปลอดภัย · ดึง SQL ลง repo · บั๊กย้อนสถานะ+dialog บันทึกย้อนหลัง · ผูกคนด้วย id · ประสิทธิภาพ · **ชุดที่ 6 (2026-09-16): The Wall badge แบบ unread + ป้าย New · ตัวเลขถาวรท้ายแท็บ Tagged/Mine · เลิกใช้ Private Memo · Dashboard เหลือแค่ Heat Map · ลบ RPC ที่ตายแล้ว 4 ตัว (A4) · **Phase E Accessibility ครบ E1–E8** · **Phase F1 แยก 5 หน้าจอเป็น route จริง**) — **ทดสอบผ่านระบบจริงครบทุกข้อ ยกเว้นที่ระบุไว้ใน Handoff Note**
+**แก้แล้ว 8 ชุดตามที่ผู้ใช้สั่ง** (ปิดช่องโหว่ความปลอดภัย · ดึง SQL ลง repo · บั๊กย้อนสถานะ+dialog บันทึกย้อนหลัง · ผูกคนด้วย id · ประสิทธิภาพ · **ชุดที่ 6 (2026-09-16): The Wall badge แบบ unread + ป้าย New · ตัวเลขถาวรท้ายแท็บ Tagged/Mine · เลิกใช้ Private Memo · Dashboard เหลือแค่ Heat Map · ลบ RPC ที่ตายแล้ว 4 ตัว (A4) · **Phase E Accessibility ครบ E1–E8** · **Phase F1 แยก 5 หน้าจอเป็น route จริง**) — **ทดสอบผ่านระบบจริงครบทุกข้อ ยกเว้นที่ระบุไว้ใน Handoff Note**
 ดูรายละเอียดที่ `CODE-REVIEW.md` (ผลตรวจ) + `FIX-INSTRUCTIONS.md` (แผนงานที่เหลือ) + Handoff Note ท้ายไฟล์นี้
 
 **สถานะเดิมที่ยังค้างอยู่ — Phase 6 (2026-09-15 ดึกที่สุด)** Phase 1-4 อนุมัติแล้วครบ Phase 5 ข้อ 1 (Workload Dashboard) เสร็จและทดสอบผ่าน Browser จริงแล้ว — ข้อ 2-3 เดิมของ Phase 5 ถูกย้ายไปรวมเป็น **Phase 7** แทน (Edge Cases & Validation + Final Review รวบยอดหลัง Phase 6 เสร็จจริง) — **Phase 6 (ฟีเจอร์บอร์ด/โน้ต ชื่อ UI จริงคือ "The Wall"/"Memo") สร้างเสร็จและผ่านการ polish ตาม feedback ผู้ใช้แบบ real-time หลายรอบแล้ว** ยังไม่มีคำอนุมัติ Phase 6 อย่างเป็นทางการ (รายละเอียด Phase 6 ฉบับเต็มอยู่ใน [`PROGRESS-ARCHIVE.md`](PROGRESS-ARCHIVE.md) หัวข้อ Handoff Note "2026-09-15 ดึกที่สุด")
@@ -235,8 +236,11 @@
 | ~~1~~ | ~~Accessibility E1–E8~~ | ✅ เสร็จแล้ว 2026-09-16 (ดูชุดที่ 6 ข้างบน) — **เหลือให้ผู้ใช้รัน Lighthouse ยืนยันเอง** |
 | ~~2~~ | ~~A4 — ลบ RPC ที่ตายแล้ว~~ | ✅ เสร็จแล้ว 2026-09-16 (ดูชุดที่ 5 ข้างบน) |
 | ~~3~~ | ~~Phase F1 — แยก 5 หน้าจอเป็น route จริง~~ | ✅ เสร็จแล้ว 2026-09-16 (ดูชุดที่ 7 ข้างบน) |
-| 4 | **LINE Login** | ผู้ใช้วางแผนไว้แล้ว · **งาน Phase B2 (session revoke) ให้รอทำพร้อมงานนี้** |
-| 5 | **Phase 6 Approval → Phase 7** | ตามลำดับเดิมใน `PLAN.md` |
+| **4** | 🔴 **เปลี่ยนรหัสผ่านที่ยังเป็น `123456` โดยเฉพาะบัญชี `admin`** | **ด่วนที่สุด** — URL เปิดสาธารณะแล้ว ใครเดารหัสถูกก็เข้าเป็น admin ได้ · **ผู้ใช้ต้องทำเองที่ `/admin/users`** (assistant กรอกรหัสผ่านให้ไม่ได้) |
+| 5 | **Phase 7 — Edge Cases & Final Review** | Phase 6 อนุมัติแล้ว เริ่มได้ · **แนะนำให้รอ feedback จากคนใช้จริงก่อน** จะได้ edge case ที่นั่งคิดเองไม่มีวันเจอ |
+| 6 | **Phase F2–F8 — จัดโครงสร้างโค้ด** | mapper ที่ก๊อปกัน 3 ไฟล์ · helper เรียก RPC · `type TaskActions` · component พื้นฐาน · validate input ที่ชั้น action — ผู้ใช้ไม่เห็นความต่าง ทำตอนไหนก็ได้ |
+| 7 | **LINE Login** | ผู้ใช้สั่งพักไว้ก่อน 2026-09-16 · **งาน Phase B2 (session revoke) ให้รอทำพร้อมงานนี้** |
+| 8 | ตรวจที่ยังค้าง 2 ข้อ | รัน **Lighthouse Accessibility** (เกณฑ์ผ่าน Phase E ที่ assistant รันเองไม่ได้) · ทดสอบ **`/trash` ด้วยบัญชีที่ไม่ใช่ admin** — ทำบนเว็บจริงได้เลยแล้ว |
 
 **✅ B1 (cookie) ปิดแล้ว 2026-09-16** — พิสูจน์บนของจริงตอน deploy ขึ้น Vercel (https + `APP_SECURE_COOKIES=true`) ผู้ใช้ login ผ่าน ไม่วนลูป
 
