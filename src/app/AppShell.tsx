@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArchiveBoxIcon, BoardIcon, ChartIcon, ChecklistIcon, KeyIcon, SettingsIcon } from "@/components/icons";
 import { AvatarFace, AVATAR_FACE_COUNT } from "@/components/AvatarFace";
+import { MinesweeperGame } from "@/components/MinesweeperGame";
 import type { SessionUser } from "@/lib/session";
 import {
   isInReviewGroup,
@@ -202,6 +203,21 @@ export function AppShell({
   const [avatarVariant, setAvatarVariant] = useState(initialAvatarVariant);
   const [pickingAvatar, setPickingAvatar] = useState(false);
   const avatarFace = avatarVariant ?? avatarFaceVariant(user.displayName, AVATAR_FACE_COUNT);
+
+  const [showGame, setShowGame] = useState(false);
+  const logoClicksRef = useRef<number[]>([]);
+
+  // แตะโลโก้ 5 ครั้งติดภายใน 2 วินาที = เปิดเกมลับ (ไม่มีปุ่มโผล่ให้เห็นตรงไหนเลย)
+  function handleLogoClick() {
+    const now = Date.now();
+    const clicks = logoClicksRef.current.filter((t) => now - t < 2000);
+    clicks.push(now);
+    logoClicksRef.current = clicks;
+    if (clicks.length >= 5) {
+      logoClicksRef.current = [];
+      setShowGame(true);
+    }
+  }
 
   async function pickAvatar(variant: number) {
     setPickingAvatar(false);
@@ -579,9 +595,13 @@ export function AppShell({
     <div className="flex flex-1 flex-col bg-bg">
       <header className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-3 border-b border-border bg-surface px-6 py-4">
         <div className="flex flex-none flex-wrap items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-[9px] bg-primary font-display text-[15px] font-bold text-on-primary">
+          <button
+            type="button"
+            onClick={handleLogoClick}
+            className="flex h-8 w-8 items-center justify-center rounded-[9px] bg-primary font-display text-[15px] font-bold text-on-primary"
+          >
             W
-          </div>
+          </button>
           <div>
             <div className="font-display text-[15px] font-semibold leading-tight text-text">
               Workload Tracker
@@ -707,6 +727,8 @@ export function AppShell({
           </form>
         </div>
       </header>
+
+      {showGame && <MinesweeperGame onClose={() => setShowGame(false)} />}
 
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full bg-text px-4 py-2 text-sm font-medium text-bg shadow-lg">
